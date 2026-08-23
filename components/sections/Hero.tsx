@@ -186,9 +186,13 @@ export function Hero() {
           found in the garden
         </span>
       </div>
-      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden opacity-80 transition-opacity duration-700 lg:opacity-100">
         <HeroFlower3D />
       </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[2] lg:hidden [background:linear-gradient(90deg,rgba(246,241,230,0.96)_0%,rgba(246,241,230,0.78)_48%,rgba(246,241,230,0.1)_100%),linear-gradient(180deg,rgba(246,241,230,0.72)_0%,transparent_72%)]"
+      />
 
       <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1.16fr_0.84fr] lg:gap-6">
         <div className="max-w-[43rem]">
@@ -254,7 +258,9 @@ export function Hero() {
                 ↓
               </span>
             </a>
-            <span className="font-hand text-lg text-[var(--color-ink-soft)]/75">take your time</span>
+            <span className="font-hand hidden text-lg text-[var(--color-ink-soft)]/75 sm:inline">
+              take your time
+            </span>
           </div>
         </div>
         <div className="pointer-events-none hidden lg:block" />

@@ -2,12 +2,44 @@
 
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  PRELOADER_FOG_REVEAL_MS,
+  PreloaderFogOGL,
+} from "@/components/animation/PreloaderFogOGL";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const MODEL_PROGRESS_EVENT = "hero-model:progress";
 const MODEL_READY_EVENT = "hero-model:ready";
 const PRELOADER_COMPLETE_EVENT = "site-preloader:complete";
 const SESSION_KEY = "kimkhanh-preloader-seen";
+
+const PRELOADER_BLOOMS = [
+  {
+    id: 4,
+    threshold: 14,
+    className: "-left-7 top-[25%] h-16 w-16 -rotate-12 sm:-left-10 sm:h-20 sm:w-20",
+  },
+  {
+    id: 11,
+    threshold: 32,
+    className: "-right-5 top-[12%] h-14 w-14 rotate-[14deg] sm:-right-9 sm:h-[4.5rem] sm:w-[4.5rem]",
+  },
+  {
+    id: 7,
+    threshold: 50,
+    className: "-left-3 bottom-[9%] h-12 w-12 rotate-[9deg] sm:-left-6 sm:h-16 sm:w-16",
+  },
+  {
+    id: 2,
+    threshold: 69,
+    className: "-right-7 bottom-[4%] h-16 w-16 -rotate-[8deg] sm:-right-10 sm:h-20 sm:w-20",
+  },
+  {
+    id: 15,
+    threshold: 86,
+    className: "left-[4%] top-0 h-10 w-10 -rotate-[18deg] sm:h-12 sm:w-12",
+  },
+] as const;
 
 type ModelProgressDetail = {
   progress: number;
@@ -16,9 +48,12 @@ type ModelProgressDetail = {
 export function SitePreloader() {
   const [rendered, setRendered] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [ready, setReady] = useState(false);
   const [exiting, setExiting] = useState(false);
+  const [fogReady, setFogReady] = useState(false);
   const reducedMotion = useReducedMotion();
   const finishedRef = useRef(false);
+  const exitTimerRef = useRef<number | null>(null);
 
   useLayoutEffect(() => {
     const html = document.documentElement;
@@ -141,28 +176,11 @@ export function SitePreloader() {
       if (cancelled || finishedRef.current) return;
       finishedRef.current = true;
       setProgress(100);
-      sessionStorage.setItem(SESSION_KEY, "true");
 
-      const revealTimer = window.setTimeout(() => {
-        if (cancelled) return;
-
-        setExiting(true);
-        document.documentElement.dataset.sitePreloader = "leaving";
-        window.dispatchEvent(new Event(PRELOADER_COMPLETE_EVENT));
-
-        const removeTimer = window.setTimeout(
-          () => {
-            if (cancelled) return;
-            document.documentElement.style.overflow = "";
-            document.body.style.overflow = "";
-            delete document.documentElement.dataset.sitePreloader;
-            setRendered(false);
-          },
-          reducedMotion ? 20 : 950,
-        );
-        timers.push(removeTimer);
-      }, 140);
-      timers.push(revealTimer);
+      const readyTimer = window.setTimeout(() => {
+        if (!cancelled) setReady(true);
+      }, reducedMotion ? 0 : 180);
+      timers.push(readyTimer);
     };
 
     void finish();
@@ -175,25 +193,58 @@ export function SitePreloader() {
     };
   }, [reducedMotion]);
 
+  useEffect(() => {
+    return () => {
+      if (exitTimerRef.current !== null) {
+        window.clearTimeout(exitTimerRef.current);
+      }
+    };
+  }, []);
+
+  const enterSite = () => {
+    if (!ready || exiting) return;
+
+    setExiting(true);
+    sessionStorage.setItem(SESSION_KEY, "true");
+    document.documentElement.dataset.sitePreloader = "leaving";
+    window.dispatchEvent(new Event(PRELOADER_COMPLETE_EVENT));
+
+    exitTimerRef.current = window.setTimeout(
+      () => {
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+        delete document.documentElement.dataset.sitePreloader;
+        setRendered(false);
+      },
+      reducedMotion ? 20 : PRELOADER_FOG_REVEAL_MS + 180,
+    );
+  };
+
   if (!rendered) return null;
 
   return (
     <div
       data-lenis-prevent
-      role="status"
-      aria-live="polite"
-      aria-label={`Gathering the garden, ${progress}% loaded`}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Welcome to Kim Khanh's garden"
       className={`fixed inset-0 z-[9999] overflow-hidden ${exiting ? "pointer-events-none" : ""}`}
     >
+      <p className="sr-only" aria-live="polite">
+        {ready ? "The garden is ready." : `Gathering the garden, ${progress}% loaded`}
+      </p>
+
       <div
-        className={`absolute inset-y-0 left-0 w-[50.5%] bg-[var(--color-paper)] transition-transform duration-[900ms] ease-[var(--ease-organic)] ${
-          exiting ? "-translate-x-full" : "translate-x-0"
+        className={`absolute inset-0 bg-[var(--color-paper)] transition-opacity ease-out ${
+          fogReady || exiting
+            ? "opacity-0 duration-[3200ms]"
+            : "opacity-100 duration-150"
         }`}
       />
-      <div
-        className={`absolute inset-y-0 right-0 w-[50.5%] bg-[var(--color-cream)] transition-transform duration-[900ms] ease-[var(--ease-organic)] ${
-          exiting ? "translate-x-full" : "translate-x-0"
-        }`}
+      <PreloaderFogOGL
+        revealing={exiting}
+        disabled={reducedMotion}
+        onReady={() => setFogReady(true)}
       />
 
       <div
@@ -201,24 +252,36 @@ export function SitePreloader() {
           exiting ? "scale-95 opacity-0" : "scale-100 opacity-100"
         }`}
       >
-        <div className="relative flex h-48 w-48 items-center justify-center sm:h-56 sm:w-56">
-          <svg
-            viewBox="0 0 200 200"
-            className="absolute inset-0 h-full w-full -rotate-12 overflow-visible"
-            aria-hidden="true"
-          >
-            <path
-              d="M100 13 C145 10 185 42 187 91 C190 141 154 184 105 188 C55 192 16 158 13 108 C10 59 48 19 100 13 Z"
-              pathLength="100"
-              fill="none"
-              stroke="var(--color-green)"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeDasharray="100"
-              style={{ strokeDashoffset: 100 - progress }}
-              className="transition-[stroke-dashoffset] duration-300 ease-out"
-            />
-          </svg>
+        <div className="relative h-60 w-60 sm:h-72 sm:w-72">
+          <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
+            {PRELOADER_BLOOMS.map((flower) => {
+              const visible = progress >= flower.threshold;
+
+              return (
+                <div
+                  key={flower.id}
+                  className={`absolute ${flower.className}`}
+                >
+                  <div
+                    className={`relative h-full w-full origin-[50%_85%] ${
+                      visible
+                        ? "animate-[preloader-bloom_780ms_cubic-bezier(0.2,0.9,0.3,1.25)_both]"
+                        : "scale-0 opacity-0"
+                    }`}
+                  >
+                    <Image
+                      src={`/assets/images/flower_${flower.id}.avif`}
+                      alt=""
+                      fill
+                      loading="eager"
+                      sizes="80px"
+                      className="object-contain drop-shadow-[0_8px_14px_rgba(42,40,35,0.1)]"
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
           <Image
             src="/assets/images/K.png"
@@ -226,21 +289,58 @@ export function SitePreloader() {
             width={800}
             height={800}
             priority
-            sizes="224px"
-            className="relative h-[72%] w-[72%] object-contain"
+            sizes="(max-width: 640px) 288px, 320px"
+            className="relative z-0 h-full w-full scale-[1.12] object-contain"
           />
         </div>
 
-        <p className="font-hand mt-3 -rotate-2 text-xl text-[var(--color-red)] sm:text-2xl">
-          gathering little things...
+        <p className="font-hand -mt-2 -rotate-2 text-xl text-[var(--color-red)] transition-opacity duration-500 sm:text-2xl">
+          {ready ? "everything is in bloom." : "gathering little things..."}
         </p>
 
-        <div className="mt-5 flex items-center gap-3 text-[var(--color-ink-soft)]">
-          <span className="h-px w-12 bg-[var(--color-ink)]/20" aria-hidden="true" />
-          <span className="font-serif-editorial min-w-10 text-center text-sm tabular-nums">
-            {progress.toString().padStart(2, "0")}%
+        <div className="mt-5 flex w-60 flex-col gap-2 text-[var(--color-ink-soft)]">
+          <span
+            className="relative block h-px w-full -rotate-[0.7deg] bg-[var(--color-ink)]/15"
+            aria-hidden="true"
+          >
+            <span
+              className="absolute inset-y-0 left-0 bg-[var(--color-green-deep)]/70 transition-[width] duration-300 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+            <span
+              className="absolute top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--color-red)] transition-[left] duration-300 ease-out"
+              style={{ left: `${progress}%` }}
+            />
           </span>
-          <span className="h-px w-12 bg-[var(--color-ink)]/20" aria-hidden="true" />
+
+          <span className="flex items-center justify-between text-[9px] uppercase tracking-[0.2em] text-[var(--color-ink-soft)]/60">
+            <span>gathering</span>
+            <span className="font-serif-editorial text-[11px] tracking-normal tabular-nums text-[var(--color-ink-soft)]">
+              {progress.toString().padStart(2, "0")}%
+            </span>
+          </span>
+        </div>
+
+        <div className="relative mt-3 flex h-16 items-center justify-center overflow-visible px-4 py-2">
+            <button
+              type="button"
+              onClick={enterSite}
+              disabled={!ready || exiting}
+              tabIndex={ready ? 0 : -1}
+              className={`group inline-flex items-center gap-4 rounded-full border border-[var(--color-green)]/45 bg-white px-6 py-3 font-serif-editorial text-sm italic text-[var(--color-ink)] transition-[opacity,transform] duration-700 ease-[var(--ease-organic)] hover:-rotate-1 hover:scale-[1.035] disabled:cursor-default ${
+                ready
+                  ? "translate-y-0 opacity-100"
+                  : "pointer-events-none translate-y-3 opacity-0"
+              }`}
+            >
+              <span>step into the garden</span>
+              <span
+                aria-hidden="true"
+                className="not-italic transition-transform duration-300 group-hover:translate-x-1"
+              >
+                &rarr;
+              </span>
+            </button>
         </div>
       </div>
     </div>

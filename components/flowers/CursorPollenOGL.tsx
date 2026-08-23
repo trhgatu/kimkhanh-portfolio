@@ -4,13 +4,14 @@ import { useEffect, useRef } from "react";
 import { Camera, Geometry, Mesh, Program, Renderer, Transform } from "ogl";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-const PARTICLE_COUNT = 180;
+const PARTICLE_COUNT = 220;
+const PRELOADER_COMPLETE_EVENT = "site-preloader:complete";
 const PALETTE = [
-  [0.96, 0.72, 0.75],
-  [0.92, 0.58, 0.62],
-  [0.98, 0.88, 0.72],
-  [0.95, 0.82, 0.52],
-  [0.78, 0.84, 0.68],
+  [1.0, 0.93, 0.66],
+  [1.0, 0.82, 0.72],
+  [1.0, 0.84, 0.9],
+  [1.0, 0.98, 0.86],
+  [0.92, 0.98, 0.82],
 ] as const;
 
 const vertexShader = /* glsl */ `
@@ -58,20 +59,26 @@ const fragmentShader = /* glsl */ `
   void main() {
     vec2 p = (vUv - 0.5) * 2.0;
     float radius = length(p);
-    float softDot = 1.0 - smoothstep(0.05, 1.0, radius);
+    float core = 1.0 - smoothstep(0.02, 0.34, radius);
+    float halo = 1.0 - smoothstep(0.08, 1.0, radius);
 
     float horizontalRay = (1.0 - smoothstep(0.0, 1.0, abs(p.x)))
-      * (1.0 - smoothstep(0.02, 0.28, abs(p.y)));
+      * (1.0 - smoothstep(0.015, 0.18, abs(p.y)));
     float verticalRay = (1.0 - smoothstep(0.0, 1.0, abs(p.y)))
-      * (1.0 - smoothstep(0.02, 0.28, abs(p.x)));
+      * (1.0 - smoothstep(0.015, 0.18, abs(p.x)));
 
-    float shimmer = 0.62 + 0.38 * sin(uTime * 0.006 + vTwinkle * 6.2831);
-    float sparkle = max(softDot * 0.72, (horizontalRay + verticalRay) * 0.62 * shimmer);
-    float alpha = sparkle * vAlpha;
+    float shimmer = 0.78 + 0.22 * sin(uTime * 0.004 + vTwinkle * 6.2831);
+    float starParticle = smoothstep(0.74, 0.96, vTwinkle);
+    float rays = (horizontalRay + verticalRay) * 0.56 * shimmer * starParticle;
+    float pollen = core * 0.88 + halo * 0.24;
+    float shape = max(pollen, rays);
+    float opacityVariation = mix(0.62, 1.0, fract(vTwinkle * 7.13));
+    float fade = smoothstep(0.0, 0.24, vAlpha);
+    float alpha = shape * fade * opacityVariation;
 
-    if (alpha < 0.01) discard;
+    if (alpha < 0.008) discard;
 
-    vec3 finalColor = mix(vColor, vec3(1.0), sparkle * 0.5);
+    vec3 finalColor = mix(vColor, vec3(1.0), core * 0.68 + halo * 0.18);
     gl_FragColor = vec4(finalColor, alpha);
   }
 `;
@@ -101,9 +108,6 @@ export function CursorPollenOGL() {
 
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
     const camera = new Camera(gl, { fov: 45, near: 1, far: 2000 });
     const scene = new Transform();
     const offsets = new Float32Array(PARTICLE_COUNT * 3);
@@ -132,6 +136,7 @@ export function CursorPollenOGL() {
       depthWrite: false,
       uniforms: { uTime: { value: 0 } },
     });
+    program.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
 
     const mesh = new Mesh(gl, { geometry, program });
     mesh.setParent(scene);
@@ -140,9 +145,16 @@ export function CursorPollenOGL() {
     let targetX = 0;
     let targetY = 0;
     let hasPointer = false;
+    let paused = document.documentElement.dataset.sitePreloader === "active";
     let lastPointerX = 0;
     let lastPointerY = 0;
     let cameraDistance = 800;
+    let lastTime = performance.now();
+
+    const resumeAfterPreloader = () => {
+      paused = false;
+      lastTime = performance.now();
+    };
 
     const resize = () => {
       const width = window.innerWidth;
@@ -155,7 +167,7 @@ export function CursorPollenOGL() {
 
     const emit = (x: number, y: number, velocityX: number, velocityY: number) => {
       const speed = Math.hypot(velocityX, velocityY);
-      const count = Math.min(Math.max(Math.floor(speed / 14), 1), 4);
+      const count = Math.min(Math.max(Math.floor(speed / 12), 1), 5);
 
       for (let i = 0; i < count; i += 1) {
         const index = particleIndex;
@@ -174,7 +186,7 @@ export function CursorPollenOGL() {
         colors[index * 3] = color[0];
         colors[index * 3 + 1] = color[1];
         colors[index * 3 + 2] = color[2];
-        params[index * 4] = Math.random() * 10 + 7;
+        params[index * 4] = Math.random() * 7 + 5;
         params[index * 4 + 1] = Math.random() * Math.PI * 2;
         params[index * 4 + 2] = 1;
         params[index * 4 + 3] = Math.random();
@@ -185,6 +197,8 @@ export function CursorPollenOGL() {
     };
 
     const onPointerMove = (event: PointerEvent) => {
+      if (paused) return;
+
       if (!hasPointer) {
         lastPointerX = event.clientX;
         lastPointerY = event.clientY;
@@ -203,12 +217,19 @@ export function CursorPollenOGL() {
     resize();
     window.addEventListener("resize", resize);
     window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener(PRELOADER_COMPLETE_EVENT, resumeAfterPreloader, {
+      once: true,
+    });
 
     let frameId = 0;
-    let lastTime = performance.now();
     const render = (now: number) => {
       const delta = Math.min((now - lastTime) / 1000, 0.08);
       lastTime = now;
+
+      if (paused) {
+        frameId = requestAnimationFrame(render);
+        return;
+      }
 
       for (let i = 0; i < PARTICLE_COUNT; i += 1) {
         if (lives[i] <= 0) {
@@ -242,6 +263,9 @@ export function CursorPollenOGL() {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener(PRELOADER_COMPLETE_EVENT, resumeAfterPreloader);
+      geometry.remove();
+      program.remove();
     };
   }, [reducedMotion]);
 

@@ -8,6 +8,42 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 const SHOW_TRANSFORM_GUI = false;
 const MODEL_PROGRESS_EVENT = "hero-model:progress";
 const MODEL_READY_EVENT = "hero-model:ready";
+const COMPACT_BREAKPOINT = 1024;
+
+const DESKTOP_PRESET = {
+  camera: {
+    fov: 41,
+    positionX: 3.08,
+    positionY: 1.53,
+    positionZ: 2.08,
+    targetX: 0.04,
+    targetY: 0.13,
+    targetZ: 0.02,
+  },
+  transform: {
+    positionX: 0.96,
+    positionY: 0.08,
+    positionZ: -0.46,
+    rotationX: 27,
+    rotationY: -68,
+    rotationZ: 47,
+    scale: 1,
+  },
+} as const;
+
+const COMPACT_PRESET = {
+  camera: {
+    ...DESKTOP_PRESET.camera,
+    fov: 48,
+  },
+  transform: {
+    ...DESKTOP_PRESET.transform,
+    positionX: 0.98,
+    positionY: -0.24,
+    positionZ: 0.22,
+    scale: 0.72,
+  },
+} as const;
 
 export function HeroFlower3D() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,16 +63,10 @@ export function HeroFlower3D() {
 
     const width = container.clientWidth || window.innerWidth;
     const height = container.clientHeight || window.innerHeight;
+    let usingCompactPreset = width < COMPACT_BREAKPOINT;
+    const initialPreset = usingCompactPreset ? COMPACT_PRESET : DESKTOP_PRESET;
 
-    const cameraSettings = {
-      fov: 41,
-      positionX: 3.08,
-      positionY: 1.53,
-      positionZ: 2.08,
-      targetX: 0.04,
-      targetY: 0.13,
-      targetZ: 0.02,
-    };
+    const cameraSettings = { ...initialPreset.camera };
     const camera = new THREE.PerspectiveCamera(cameraSettings.fov, width / height, 0.1, 100);
     camera.position.set(
       cameraSettings.positionX,
@@ -56,7 +86,9 @@ export function HeroFlower3D() {
       powerPreference: "high-performance",
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio, usingCompactPreset ? 1.5 : 2),
+    );
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const lightSettings = {
@@ -118,13 +150,7 @@ export function HeroFlower3D() {
 
     const flowerGroup = new THREE.Group();
     const transform = {
-      positionX: 0.96,
-      positionY: 0.08,
-      positionZ: -0.46,
-      rotationX: 27,
-      rotationY: -68,
-      rotationZ: 47,
-      scale: 1,
+      ...initialPreset.transform,
       copyTransform: () => {
         const values = [
           `position: [${transform.positionX.toFixed(2)}, ${transform.positionY.toFixed(2)}, ${transform.positionZ.toFixed(2)}]`,
@@ -151,6 +177,15 @@ export function HeroFlower3D() {
     );
     flowerGroup.scale.setScalar(transform.scale);
     scene.add(flowerGroup);
+
+    const applyResponsivePreset = (compact: boolean) => {
+      const preset = compact ? COMPACT_PRESET : DESKTOP_PRESET;
+      Object.assign(cameraSettings, preset.camera);
+      Object.assign(transform, preset.transform);
+      renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio, compact ? 1.5 : 2),
+      );
+    };
 
     if (process.env.NODE_ENV === "development" && SHOW_TRANSFORM_GUI) {
       const setupGui = async () => {
@@ -389,6 +424,13 @@ export function HeroFlower3D() {
       if (!container) return;
       const w = container.clientWidth || window.innerWidth;
       const h = container.clientHeight || window.innerHeight;
+      const nextCompactPreset = w < COMPACT_BREAKPOINT;
+
+      if (nextCompactPreset !== usingCompactPreset) {
+        usingCompactPreset = nextCompactPreset;
+        applyResponsivePreset(usingCompactPreset);
+      }
+
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
@@ -396,10 +438,16 @@ export function HeroFlower3D() {
     window.addEventListener("resize", onResize);
 
     // 7. Animation Loop with performance.now() delta timing
-    let animId: number;
+    let animId = 0;
+    let heroVisible = true;
     let lastTime = performance.now();
 
     const animate = (time: number) => {
+      if (!heroVisible) {
+        animId = 0;
+        return;
+      }
+
       const delta = Math.min((time - lastTime) / 1000, 0.1);
       lastTime = time;
 
@@ -438,12 +486,30 @@ export function HeroFlower3D() {
       animId = requestAnimationFrame(animate);
     };
 
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          heroVisible = false;
+          cancelAnimationFrame(animId);
+          animId = 0;
+          return;
+        }
+
+        heroVisible = true;
+        lastTime = performance.now();
+        if (!animId) animId = requestAnimationFrame(animate);
+      },
+      { rootMargin: "120px 0px" },
+    );
+    visibilityObserver.observe(container);
+
     animId = requestAnimationFrame(animate);
 
     return () => {
       disposed = true;
       gui?.destroy();
       window.removeEventListener("resize", onResize);
+      visibilityObserver.disconnect();
       cancelAnimationFrame(animId);
       if (mixer) {
         mixer.stopAllAction();

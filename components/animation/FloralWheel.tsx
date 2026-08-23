@@ -124,23 +124,23 @@ export function FloralWheel() {
         layer="far"
         angleOffset={11}
         flowerScale={0.9}
-        className="z-0 w-[min(280vw,112rem)] opacity-25 sm:w-[min(208vw,112rem)] lg:w-[min(154vw,112rem)]"
-        flowerClassName="blur-[3px] saturate-75"
+        className="z-0 w-[min(255vw,112rem)] opacity-20 sm:w-[min(208vw,112rem)] sm:opacity-25 lg:w-[min(154vw,112rem)]"
+        flowerClassName="blur-[2px] saturate-75 sm:blur-[3px]"
         renderFlowers={flowersReady}
       />
       <FlowerRing
         layer="mid"
         angleOffset={-7}
         flowerScale={0.78}
-        className="z-[1] w-[min(205vw,88rem)] opacity-45 sm:w-[min(152vw,88rem)] lg:w-[min(121vw,88rem)]"
-        flowerClassName="blur-[1px] saturate-[0.86]"
+        className="z-[1] w-[min(190vw,88rem)] opacity-40 sm:w-[min(152vw,88rem)] sm:opacity-45 lg:w-[min(121vw,88rem)]"
+        flowerClassName="blur-[0.5px] saturate-[0.86] sm:blur-[1px]"
         renderFlowers={flowersReady}
       />
       <FlowerRing
         layer="front"
         angleOffset={0}
         flowerScale={1}
-        className="z-[2] w-[min(120vw,58rem)] sm:w-[min(92vw,58rem)] lg:w-[min(74vw,58rem)]"
+        className="z-[2] w-[min(132vw,58rem)] sm:w-[min(92vw,58rem)] lg:w-[min(74vw,58rem)]"
         flowerClassName=""
         animateFaces
         renderFlowers={flowersReady}
@@ -203,7 +203,7 @@ function FlowerRing({
                     src={`/assets/images/flower_${flower.id}.avif`}
                     alt=""
                     fill
-                    loading="eager"
+                    loading={layer === "front" ? "eager" : "lazy"}
                     sizes="(min-width: 1024px) 190px, (min-width: 640px) 18vw, 24vw"
                     className="object-contain"
                   />

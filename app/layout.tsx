@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, Caveat } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/animation/SmoothScrollProvider";
 import { CursorPollenOGL } from "@/components/flowers/CursorPollenOGL";
@@ -44,6 +45,7 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </SmoothScrollProvider>
+        <Analytics />
       </body>
     </html>
   );

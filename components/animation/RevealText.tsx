@@ -61,7 +61,12 @@ export function RevealText({
       {lines.map((line, index) => (
         <span
           key={index}
-          style={{ display: "block", overflow: "hidden" }}
+          style={{
+            display: "block",
+            overflow: "hidden",
+            paddingBottom: "0.14em",
+            marginBottom: "-0.14em",
+          }}
         >
           <span data-reveal-line style={{ display: "block" }} className={lineClassName}>
             {line}
