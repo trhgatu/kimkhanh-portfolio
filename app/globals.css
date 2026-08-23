@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f6f1e6;
+  --color-paper-deep: #efe7d6;
+  --color-ink: #2a2823;
+  --color-ink-soft: #4a463d;
+  --color-green: #6b7658;
+  --color-green-deep: #4d5640;
+  --color-pink: #d99aa0;
+  --color-red: #bd635c;
+  --color-yellow: #dfb957;
+  --color-lavender: #a89bc4;
+  --color-cream: #fbf8f0;
+
+  --color-blush: #f0cbc2;
+  --color-butter: #f3dfa0;
+  --color-sage: #dbe2c9;
+
+  --ease-organic: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-paper);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-pink);
+  color: var(--color-cream);
+}
+
+a {
+  color: inherit;
+}
+
+svg.decorative {
+  pointer-events: none;
+}
+
+.font-serif-editorial {
+  font-family: var(--font-serif);
+}
+
+.font-hand {
+  font-family: var(--font-hand);
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-red);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.overflow-guard {
+  overflow-x: hidden;
+}
+
+.hero-paper {
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 42% 58% at 76% 45%, color-mix(in srgb, var(--color-blush) 48%, transparent), transparent 72%),
+    radial-gradient(ellipse 38% 30% at 12% 92%, color-mix(in srgb, var(--color-sage) 42%, transparent), transparent 74%),
+    linear-gradient(to bottom, transparent 0%, transparent 68%, var(--color-blush) 100%),
+    linear-gradient(135deg, var(--color-paper) 0%, var(--color-cream) 52%, var(--color-paper-deep) 100%);
+}
+
+.hero-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.28;
+  background:
+    repeating-linear-gradient(0deg, transparent 0, transparent 7px, rgba(42, 40, 35, 0.018) 8px),
+    repeating-linear-gradient(90deg, transparent 0, transparent 11px, rgba(42, 40, 35, 0.012) 12px);
+  mix-blend-mode: multiply;
+}
+
+.hero-paper::after {
+  content: "";
+  position: absolute;
+  top: 18%;
+  right: 13%;
+  z-index: -1;
+  width: min(34vw, 28rem);
+  aspect-ratio: 1;
+  pointer-events: none;
+  border-radius: 48% 52% 58% 42%;
+  background: color-mix(in srgb, var(--color-yellow) 13%, transparent);
+  filter: blur(28px);
+  transform: rotate(-12deg);
+}
+
+.hero-flower-3d {
+  filter: saturate(0.78) contrast(0.92) sepia(0.06);
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
