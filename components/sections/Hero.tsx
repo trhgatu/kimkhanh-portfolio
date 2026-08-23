@@ -11,6 +11,8 @@ const HeroFlower3D = dynamic(
   { ssr: false },
 );
 
+const PRELOADER_COMPLETE_EVENT = "site-preloader:complete";
+
 export function Hero() {
   const rootRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -56,6 +58,10 @@ export function Hero() {
 
     registerGsap();
 
+    let timeline: ReturnType<typeof gsap.timeline> | null = null;
+    let startIntro = () => {};
+    const handlePreloaderComplete = () => startIntro();
+
     const ctx = gsap.context(() => {
       gsap.set([eyebrow, supporting], {
         opacity: 0,
@@ -74,13 +80,16 @@ export function Hero() {
       });
       gsap.set(footerItems, { opacity: 0, y: 8 });
 
-      const tl = gsap.timeline({ delay: 0.12 });
+      startIntro = () => {
+        if (timeline) return;
+        timeline = gsap.timeline({ delay: 0.06 });
 
-      tl.to(
-        eyebrow,
-        { opacity: 1, y: 0, rotate: -1.5, duration: 0.7, ease: "power3.out" },
-        0.08,
-      )
+        timeline
+          .to(
+            eyebrow,
+            { opacity: 1, y: 0, rotate: -1.5, duration: 0.7, ease: "power3.out" },
+            0.08,
+          )
         .to(
           headlineLetters,
           {
@@ -143,10 +152,23 @@ export function Hero() {
             ease: "power2.out",
           },
           1.83,
-        );
+          );
+      };
     }, root);
 
-    return () => ctx.revert();
+    if (document.documentElement.dataset.sitePreloader) {
+      window.addEventListener(PRELOADER_COMPLETE_EVENT, handlePreloaderComplete, {
+        once: true,
+      });
+    } else {
+      startIntro();
+    }
+
+    return () => {
+      window.removeEventListener(PRELOADER_COMPLETE_EVENT, handlePreloaderComplete);
+      timeline?.kill();
+      ctx.revert();
+    };
   }, [reducedMotion]);
 
   return (
@@ -163,8 +185,6 @@ export function Hero() {
         <span data-hero-specimen className="absolute bottom-[18%] right-[8%] font-hand text-xl text-[var(--color-red)]/75">
           found in the garden
         </span>
-        <span data-hero-specimen className="absolute right-[4%] top-[18%] h-2 w-2 rounded-full border border-[var(--color-red)]/50" />
-        <span data-hero-specimen className="absolute bottom-[18%] left-[3%] text-lg text-[var(--color-yellow)]">✦</span>
       </div>
       <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
         <HeroFlower3D />

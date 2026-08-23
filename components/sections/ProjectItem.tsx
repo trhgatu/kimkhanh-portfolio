@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { CollectionItem } from "@/data/projects";
@@ -15,8 +15,31 @@ export function ProjectItem({ item, index }: ProjectItemProps) {
   const rootRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
+  const [imageReady, setImageReady] = useState(false);
   const isReversed = index % 2 === 1;
   const number = String(index + 1).padStart(2, "0");
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    if (!("IntersectionObserver" in window)) {
+      const frame = requestAnimationFrame(() => setImageReady(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setImageReady(true);
+        observer.disconnect();
+      },
+      { rootMargin: "100% 0px" },
+    );
+
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -98,13 +121,16 @@ export function ProjectItem({ item, index }: ProjectItemProps) {
               ref={imageRef}
               className="absolute -inset-y-[6%] inset-x-0 transition-transform duration-1000 ease-[var(--ease-organic)] group-hover:scale-[1.035]"
             >
-              <Image
-                src={item.image}
-                alt={item.imageAlt}
-                fill
-                sizes="(min-width: 1280px) 52vw, (min-width: 1024px) 58vw, 90vw"
-                className="object-cover saturate-[.82] contrast-[.94]"
-              />
+              {imageReady ? (
+                <Image
+                  src={item.image}
+                  alt={item.imageAlt}
+                  fill
+                  loading="eager"
+                  sizes="(min-width: 1280px) 52vw, (min-width: 1024px) 58vw, 90vw"
+                  className="object-cover saturate-[.82] contrast-[.94]"
+                />
+              ) : null}
             </div>
             <div
               aria-hidden="true"

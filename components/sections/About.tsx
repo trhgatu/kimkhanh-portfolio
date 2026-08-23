@@ -1,7 +1,5 @@
-"use client";
-
 import { RevealText } from "@/components/animation/RevealText";
-import { GrowingFlower } from "@/components/flowers/GrowingFlower";
+import { AboutAtmosphere } from "@/components/animation/AboutAtmosphere";
 
 export function About() {
   return (
@@ -9,18 +7,9 @@ export function About() {
       id="about"
       className="relative mx-auto max-w-6xl overflow-hidden px-6 py-32 sm:px-10 sm:py-40"
     >
-      <div className="absolute -right-8 bottom-0 hidden sm:block">
-        <GrowingFlower
-          variant="leafBranch"
-          color="var(--color-green)"
-          scale={1.6}
-          trigger="scrub"
-          scrubStart="top 90%"
-          scrubEnd="bottom 60%"
-        />
-      </div>
+      <AboutAtmosphere />
 
-      <div className="grid gap-12 sm:grid-cols-[0.7fr_1.3fr] sm:items-center sm:gap-20">
+      <div className="relative z-10 grid gap-12 sm:grid-cols-[0.7fr_1.3fr] sm:items-center sm:gap-20">
         <div className="relative mx-auto w-full max-w-[16rem] sm:mx-0">
           <div className="relative aspect-[4/5] rotate-[-3deg] overflow-hidden rounded-[48%_52%_46%_54%] border border-[var(--color-ink)]/15 bg-[var(--color-blush)] p-2 shadow-[0_18px_40px_rgba(42,40,35,0.08)]">
             <div className="relative flex h-full items-center justify-center overflow-hidden rounded-[46%_54%_50%_50%] bg-[var(--color-sage)]">

@@ -1,12 +1,13 @@
 import { COLLECTIONS } from "@/data/projects";
 import { RevealText } from "@/components/animation/RevealText";
+import { ArchiveVine } from "@/components/animation/ArchiveVine";
 import { ProjectItem } from "./ProjectItem";
 
 export function Projects() {
   return (
     <section
       id="work"
-      className="relative z-20 overflow-clip rounded-t-[2.5rem] bg-[var(--color-sage)] px-5 py-28 text-[var(--color-ink)] shadow-[0_-28px_70px_rgba(74,70,61,.08)] sm:rounded-t-[4rem] sm:px-10 sm:py-36"
+      className="relative z-20 overflow-clip rounded-t-[2.5rem] bg-[var(--color-sage)] px-5 py-28 text-[var(--color-ink)] sm:rounded-t-[4rem] sm:px-10 sm:py-36"
     >
       <div
         aria-hidden="true"
@@ -22,13 +23,22 @@ export function Projects() {
       />
 
       <div className="relative mx-auto max-w-7xl">
+        <ArchiveVine />
+
         <div className="grid gap-20 lg:grid-cols-[minmax(19rem,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-16 xl:gap-24">
           <header className="lg:sticky lg:top-28 lg:self-start">
             <p className="font-hand inline-block -rotate-2 text-2xl text-[var(--color-red)] sm:text-3xl">
               from my little archive
             </p>
-            <h2 className="font-serif-editorial mt-4 text-[clamp(3.6rem,7vw,7rem)] leading-[0.84] tracking-[-0.06em]">
-              <RevealText lines={["Things worth", "keeping."]} />
+            <h2 className="font-serif-editorial mt-4 text-[clamp(3.6rem,7vw,7rem)] leading-[0.9] tracking-[-0.06em]">
+              <RevealText
+                lines={[
+                  "Things worth",
+                  <span key="keeping" className="block pb-[0.16em]">
+                    keeping.
+                  </span>,
+                ]}
+              />
             </h2>
 
             <p className="mt-8 max-w-md font-sans text-sm leading-7 text-[var(--color-ink-soft)] sm:text-base">
@@ -37,16 +47,6 @@ export function Projects() {
             <p className="font-hand mt-6 text-xl text-[var(--color-green-deep)]">
               collected slowly, with care ↓
             </p>
-
-            <div
-              aria-hidden="true"
-              className="mt-10 hidden items-center gap-3 lg:flex"
-            >
-              <span className="relative h-14 w-px bg-[var(--color-green-deep)]/25 before:absolute before:-left-[3px] before:top-0 before:h-[7px] before:w-[7px] before:rounded-full before:bg-[var(--color-red)]" />
-              <span className="font-sans text-[8px] uppercase tracking-[0.22em] text-[var(--color-ink)]/40">
-                pinned while you wander
-              </span>
-            </div>
           </header>
 
           <div className="space-y-24 sm:space-y-32 lg:space-y-36">

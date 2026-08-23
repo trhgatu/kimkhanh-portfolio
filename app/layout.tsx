@@ -5,6 +5,7 @@ import { SmoothScrollProvider } from "@/components/animation/SmoothScrollProvide
 import { CursorPollenOGL } from "@/components/flowers/CursorPollenOGL";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { SitePreloader } from "@/components/layout/SitePreloader";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable} ${caveat.variable}`}>
       <body className="overflow-guard">
+        <SitePreloader />
         <SmoothScrollProvider>
           <CursorPollenOGL />
           <Navbar />

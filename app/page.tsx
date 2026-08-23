@@ -3,8 +3,8 @@ import { About } from "@/components/sections/About";
 import { Projects } from "@/components/sections/Projects";
 import { Marquee } from "@/components/sections/Marquee";
 import { Contact } from "@/components/sections/Contact";
-import { BotanicalVine } from "@/components/flowers/BotanicalVine";
 import { HeroAboutDivider } from "@/components/animation/HeroAboutDivider";
+import { AboutFrame } from "@/components/animation/AboutFrame";
 
 export default function Home() {
   return (
@@ -16,12 +16,17 @@ export default function Home() {
         id="content-stack"
         className="relative z-10 bg-[var(--color-blush)]"
       >
-        <div className="sticky top-0 z-0 flex min-h-svh items-center overflow-hidden bg-[var(--color-blush)]">
+        <div className="sticky top-0 z-0 flex min-h-svh items-center bg-[var(--color-blush)]">
+          <AboutFrame />
           <div className="relative z-10 w-full">
-            <BotanicalVine className="hidden sm:block" />
             <About />
           </div>
         </div>
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none h-[45svh]"
+        />
 
         <Projects />
       </div>
