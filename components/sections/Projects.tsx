@@ -51,7 +51,11 @@ export function Projects() {
 
           <div className="space-y-24 sm:space-y-32 lg:space-y-36">
             {COLLECTIONS.map((item, index) => (
-              <ProjectItem key={item.slug} item={item} index={index} />
+              <ProjectItem
+                key={item.slug}
+                item={item}
+                index={index}
+              />
             ))}
           </div>
         </div>

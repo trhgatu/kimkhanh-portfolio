@@ -8,6 +8,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SitePreloader } from "@/components/layout/SitePreloader";
 
+import { AudioToggle } from "@/components/layout/AudioToggle";
+
 const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-serif",
@@ -27,9 +29,46 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kimkhanh.me"),
   title: "Kim Khanh — A Little Personal Archive",
   description:
     "Kim Khanh's little garden on the internet — a personal collection of flowers, places, words, and everyday joys.",
+  keywords: [
+    "Kim Khanh",
+    "personal archive",
+    "botanical garden",
+    "flowers",
+    "slow living",
+    "scrapbook",
+    "editorial portfolio",
+  ],
+  authors: [
+    { name: "Kim Khanh" },
+    { name: "trhgatu", url: "https://github.com/trhgatu" },
+  ],
+  creator: "trhgatu",
+  openGraph: {
+    title: "Kim Khanh — A Little Personal Archive",
+    description:
+      "A personal collection of flowers, places, words, and everyday joys.",
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "/assets/images/flower_2.avif",
+        width: 1200,
+        height: 630,
+        alt: "Kim Khanh Botanical Archive",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kim Khanh — A Little Personal Archive",
+    description:
+      "A personal collection of flowers, places, words, and everyday joys.",
+    images: ["/assets/images/flower_2.avif"],
+  },
 };
 
 export default function RootLayout({
@@ -44,6 +83,7 @@ export default function RootLayout({
           <Navbar />
           <main>{children}</main>
           <Footer />
+          <AudioToggle />
         </SmoothScrollProvider>
         <Analytics />
       </body>

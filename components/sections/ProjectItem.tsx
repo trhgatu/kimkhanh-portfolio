@@ -176,7 +176,6 @@ export function ProjectItem({ item, index }: ProjectItemProps) {
 
         <div className="mt-8 flex items-center gap-4">
           <span className="font-hand text-xl text-[var(--color-red)]">a little favourite</span>
-          <span aria-hidden="true" className="h-px w-14 bg-[var(--color-ink)]/20" />
         </div>
       </div>
     </article>

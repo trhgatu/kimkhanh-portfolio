@@ -1,7 +1,22 @@
+"use client";
+
+import { useState } from "react";
 import { RevealText } from "@/components/animation/RevealText";
 import { FloralWheel } from "@/components/animation/FloralWheel";
 
 export function Contact() {
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText("hello@kimkhanh.me");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      window.location.href = "mailto:hello@kimkhanh.me";
+    }
+  };
+
   return (
     <section
       id="contact"
@@ -24,13 +39,20 @@ export function Contact() {
             hello. My inbox is always open.
           </p>
 
-          <div className="group relative mt-4 inline-block sm:mt-8">
-            <a
-              href="mailto:hello@kimkhanh.me"
-              className="relative inline-flex max-w-full items-center rounded-full border border-white bg-white px-4 py-2.5 font-serif-editorial text-xs text-[var(--color-ink)] shadow-[0_10px_28px_rgba(42,40,35,0.14)] transition-transform duration-300 ease-[var(--ease-organic)] group-hover:-rotate-1 group-hover:scale-[1.03] sm:px-7 sm:py-3.5 sm:text-base"
+          <div className="relative mt-5 flex items-center justify-center sm:mt-8">
+            <button
+              type="button"
+              onClick={copyEmail}
+              className="group relative inline-flex items-center gap-2 rounded-full border border-white bg-white px-5 py-2.5 font-serif-editorial text-xs text-[var(--color-ink)] shadow-[0_10px_28px_rgba(42,40,35,0.14)] transition-transform duration-300 ease-[var(--ease-organic)] hover:-rotate-1 hover:scale-[1.03] sm:px-7 sm:py-3.5 sm:text-sm"
             >
-              hello@kimkhanh.me
-            </a>
+              <span>{copied ? "copied to clipboard ✿" : "hello@kimkhanh.me"}</span>
+              <span
+                aria-hidden="true"
+                className="text-[10px] text-[var(--color-ink-soft)]/50 group-hover:text-[var(--color-red)]"
+              >
+                {copied ? "✓" : "📋"}
+              </span>
+            </button>
           </div>
         </div>
       </div>

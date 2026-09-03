@@ -137,6 +137,34 @@ a:focus-visible {
   }
 }
 
+@keyframes marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 38s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 42s linear infinite;
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
