@@ -12,7 +12,7 @@ type AudioContextValue = {
 };
 
 const AudioContext = createContext<AudioContextValue | null>(null);
-const TRACK_VOLUME = 0.16;
+const TRACK_VOLUME = 0.3;
 
 export function AudioProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement>(null);
