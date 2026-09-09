@@ -194,6 +194,16 @@ export function CollectionDetailsModal({ item, open, onClose, origin }: Collecti
               {item.title}
             </h2>
             <p className="font-hand mt-7 text-xl" style={{ color: item.color }}>a closer look</p>
+            <div className="mt-7 flex items-start gap-4 border-t border-[var(--color-ink)]/12 pt-6">
+              <span
+                aria-hidden="true"
+                className="mt-2 size-2 shrink-0 rounded-full"
+                style={{ backgroundColor: item.color }}
+              />
+              <p className="max-w-sm font-sans text-sm leading-7 text-[var(--color-ink-soft)] sm:text-[0.95rem]">
+                {item.description}
+              </p>
+            </div>
           </header>
 
           <div className="grid gap-8 sm:grid-cols-12 sm:gap-10">

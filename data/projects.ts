@@ -64,6 +64,55 @@ export const COLLECTIONS: CollectionItem[] = [
         description:
           "I communicate with customers, listen closely to what each case needs, and follow details through from the first request to completion.",
       },
+      {
+        id: "port-4",
+        title: "A Day at Saigon Hiep Phuoc Port",
+        subtitle: "people · place · port life",
+        image: "/assets/images/port-life/port-life_4.jpg",
+        description: "A bright day with colleagues on the working quay at Saigon Hiep Phuoc Port.",
+      },
+      {
+        id: "port-5",
+        title: "Cruise Ship Call",
+        subtitle: "on the quay",
+        image: "/assets/images/port-life/port-life_5.jpg",
+        description: "A moment beside a visiting cruise ship during a port call.",
+      },
+      {
+        id: "port-6",
+        title: "Glengyle",
+        subtitle: "vessel visit",
+        image: "/assets/images/port-life/port-life_6.jpg",
+        description: "Standing alongside the bulk carrier Glengyle during a day at the port.",
+      },
+      {
+        id: "port-7",
+        title: "Ilma at the Port",
+        subtitle: "vessel visit",
+        image: "/assets/images/port-life/port-life_7.jpg",
+        description: "A portrait in workwear in front of the cruise yacht Ilma.",
+      },
+      {
+        id: "port-8",
+        title: "A Little Christmas at Work",
+        subtitle: "seasonal moments",
+        image: "/assets/images/port-life/port-life_8.jpg",
+        description: "A small festive memory from an ordinary working day.",
+      },
+      {
+        id: "port-9",
+        title: "At the Desk",
+        subtitle: "documents · coordination",
+        image: "/assets/images/port-life/port-life_9.jpg",
+        description: "The quieter side of port operations: documents, coordination, and careful follow-through.",
+      },
+      {
+        id: "port-10",
+        title: "The Port Team",
+        subtitle: "people behind the work",
+        image: "/assets/images/port-life/port-life_10.jpg",
+        description: "The people and teamwork behind each day of port operations.",
+      },
     ],
   },
   {
@@ -140,6 +189,14 @@ export const COLLECTIONS: CollectionItem[] = [
         description:
           "Listening 5.0, Reading 6.0, Speaking 6.0, and Writing 6.5.",
       },
+      {
+        id: "learning-3",
+        title: "Graduation Day",
+        subtitle: "a chapter completed · 2024",
+        image: "/assets/images/learning/learning_4.jpg",
+        description:
+          "A joyful portrait from graduation day, marking the completion of my university journey in 2024.",
+      },
     ],
   },
   {
@@ -169,6 +226,20 @@ export const COLLECTIONS: CollectionItem[] = [
         image: "/assets/images/little-joys/little-joys_9.jpg",
         description:
           "At university I joined badminton and chess clubs, including the University of Transport badminton tournament in 2024 and the Van Lang Cup student chess tournaments in 2021 and 2022.",
+      },
+      {
+        id: "life-4",
+        title: "Badminton Break",
+        subtitle: "play · movement · laughter",
+        image: "/assets/images/little-joys/little-joys_10.jpg",
+        description: "A playful break between badminton games.",
+      },
+      {
+        id: "life-5",
+        title: "A Day on Court",
+        subtitle: "badminton with friends",
+        image: "/assets/images/little-joys/little-joys_11.jpg",
+        description: "Badminton is one of the ways I stay active and spend joyful time with people around me.",
       },
       {
         id: "life-3",
