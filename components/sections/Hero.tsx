@@ -175,7 +175,7 @@ export function Hero() {
     <section
       id="hero"
       ref={rootRef}
-      className="hero-paper relative z-0 flex min-h-svh flex-col justify-center overflow-hidden px-6 pb-28 pt-24 sm:px-10 sm:pb-32 sm:pt-28"
+      className="hero-paper relative z-0 flex flex-col justify-center overflow-hidden px-6 pb-28 pt-24 sm:px-10 sm:pb-32 sm:pt-28"
     >
       <div
         ref={specimenRef}

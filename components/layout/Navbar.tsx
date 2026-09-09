@@ -5,6 +5,7 @@ import { useLenisInstance } from "@/components/animation/SmoothScrollProvider";
 import { NAV_LINKS } from "@/data/nav";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { AudioToggle } from "@/components/layout/AudioToggle";
 
 const PRELOADER_COMPLETE_EVENT = "site-preloader:complete";
 const SECTION_LINKS = [{ label: "Home", href: "#hero" }, ...NAV_LINKS];
@@ -171,27 +172,30 @@ export function Navbar() {
           </ul>
         </nav>
 
-        <button
-          type="button"
-          aria-expanded={menuOpen}
-          aria-controls="mobile-navigation"
-          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
-          onClick={() => setMenuOpen((open) => !open)}
-          className="relative flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-ink)]/12 bg-[var(--color-paper)]/70 text-[var(--color-ink)] transition-transform duration-300 active:scale-95 sm:hidden"
-        >
-          <span
-            aria-hidden="true"
-            className={`absolute h-px w-4 bg-current transition-transform duration-300 ease-[var(--ease-organic)] ${
-              menuOpen ? "translate-y-0 rotate-45" : "-translate-y-[3px] rotate-0"
-            }`}
-          />
-          <span
-            aria-hidden="true"
-            className={`absolute h-px w-4 bg-current transition-transform duration-300 ease-[var(--ease-organic)] ${
-              menuOpen ? "translate-y-0 -rotate-45" : "translate-y-[3px] rotate-0"
-            }`}
-          />
-        </button>
+        <div className="flex items-center gap-2">
+          <AudioToggle />
+          <button
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            onClick={() => setMenuOpen((open) => !open)}
+            className="relative flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-ink)]/12 bg-[var(--color-paper)]/70 text-[var(--color-ink)] transition-transform duration-300 active:scale-95 sm:hidden"
+          >
+            <span
+              aria-hidden="true"
+              className={`absolute h-px w-4 bg-current transition-transform duration-300 ease-[var(--ease-organic)] ${
+                menuOpen ? "translate-y-0 rotate-45" : "-translate-y-[3px] rotate-0"
+              }`}
+            />
+            <span
+              aria-hidden="true"
+              className={`absolute h-px w-4 bg-current transition-transform duration-300 ease-[var(--ease-organic)] ${
+                menuOpen ? "translate-y-0 -rotate-45" : "translate-y-[3px] rotate-0"
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       <div

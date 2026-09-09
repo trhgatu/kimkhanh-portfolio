@@ -8,8 +8,7 @@ import { FlowerCursor } from "@/components/flowers/FlowerCursor";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SitePreloader } from "@/components/layout/SitePreloader";
-
-import { AudioToggle } from "@/components/layout/AudioToggle";
+import { AudioProvider } from "@/components/audio/AudioProvider";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -80,15 +79,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable} ${caveat.variable}`}>
       <body className="overflow-guard">
-        <SitePreloader />
-        <SmoothScrollProvider>
-          <CursorPollenOGL />
-          <FlowerCursor />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <AudioToggle />
-        </SmoothScrollProvider>
+        <AudioProvider>
+          <SitePreloader />
+          <SmoothScrollProvider>
+            <CursorPollenOGL />
+            <FlowerCursor />
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+          </SmoothScrollProvider>
+        </AudioProvider>
         <Analytics />
       </body>
     </html>

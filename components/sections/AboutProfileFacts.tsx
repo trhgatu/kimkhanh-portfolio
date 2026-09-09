@@ -18,9 +18,15 @@ function Marker({
     <span className="relative isolate inline-block whitespace-normal px-1.5">
       <span
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-[0.12em] -z-10 h-[0.9em] opacity-80"
-        style={{ backgroundColor: color, transform: `rotate(${rotate})` }}
-      />
+        className="absolute inset-x-0 bottom-[0.12em] -z-10 h-[0.9em]"
+        style={{ transform: `rotate(${rotate})` }}
+      >
+        <span
+          data-about-marker
+          className="block h-full w-full opacity-80"
+          style={{ backgroundColor: color }}
+        />
+      </span>
       {children}
     </span>
   );
@@ -36,24 +42,59 @@ export function AboutProfileFacts() {
 
     registerGsap();
     const rows = root.querySelectorAll<HTMLElement>("[data-about-fact]");
+    const markers = root.querySelectorAll<HTMLElement>("[data-about-marker]");
+    const underlines = root.querySelectorAll<SVGPathElement>("[data-about-underline]");
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        rows,
-        { autoAlpha: 0, x: -28, rotate: -0.6 },
-        {
+      gsap.set(markers, {
+        clipPath: "inset(0 100% 0 0)",
+        scaleY: 0.72,
+        transformOrigin: "left center",
+      });
+      underlines.forEach((path) => {
+        const length = path.getTotalLength();
+        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+      });
+
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: root,
+          start: "top 84%",
+          once: true,
+        },
+      });
+
+      timeline.fromTo(
+          rows,
+          { autoAlpha: 0, x: -28, rotate: -0.6 },
+          {
           autoAlpha: 1,
           x: 0,
           rotate: 0,
           duration: 0.78,
           stagger: 0.1,
           ease: "power3.out",
-          scrollTrigger: {
-            trigger: root,
-            start: "top 84%",
-            once: true,
           },
-        },
-      );
+        )
+        .to(
+          markers,
+          {
+            clipPath: "inset(0 0% 0 0)",
+            scaleY: 1,
+            duration: 0.68,
+            stagger: 0.16,
+            ease: "power2.inOut",
+          },
+          0.34,
+        )
+        .to(
+          underlines,
+          {
+            strokeDashoffset: 0,
+            duration: 1.05,
+            ease: "power2.inOut",
+          },
+          0.72,
+        );
     }, root);
 
     return () => ctx.revert();
@@ -96,6 +137,7 @@ export function AboutProfileFacts() {
             className="absolute -bottom-1 left-0 h-2 w-full overflow-visible opacity-80"
           >
             <path
+              data-about-underline
               d="M2 8 C90 3, 155 11, 236 7 S405 4, 518 8"
               fill="none"
               stroke="var(--color-green)"

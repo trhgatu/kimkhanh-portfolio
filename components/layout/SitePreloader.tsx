@@ -7,6 +7,7 @@ import {
   PreloaderFogOGL,
 } from "@/components/animation/PreloaderFogOGL";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useAudio } from "@/components/audio/AudioProvider";
 
 const MODEL_PROGRESS_EVENT = "hero-model:progress";
 const MODEL_READY_EVENT = "hero-model:ready";
@@ -111,6 +112,7 @@ export function SitePreloader() {
   const [exiting, setExiting] = useState(false);
   const [fogReady, setFogReady] = useState(false);
   const reducedMotion = useReducedMotion();
+  const { play } = useAudio();
   const finishedRef = useRef(false);
   const exitTimerRef = useRef<number | null>(null);
 
@@ -277,6 +279,12 @@ export function SitePreloader() {
     );
   }, [ready, exiting, reducedMotion]);
 
+  const enterWithMusic = useCallback(() => {
+    if (!ready || exiting) return;
+    void play();
+    enterSite();
+  }, [enterSite, exiting, play, ready]);
+
   useEffect(() => {
     if (!ready || exiting) return;
     const onKey = (e: KeyboardEvent) => {
@@ -304,9 +312,8 @@ export function SitePreloader() {
       role="dialog"
       aria-modal="true"
       aria-label="Welcome to Kim Khanh's garden"
-      onClick={ready && !exiting ? enterSite : undefined}
       className={`fixed inset-0 z-[9999] overflow-hidden ${
-        exiting ? "pointer-events-none" : ready ? "cursor-pointer" : ""
+        exiting ? "pointer-events-none" : ""
       }`}
     >
       <p className="sr-only" aria-live="polite">
@@ -331,7 +338,6 @@ export function SitePreloader() {
           exiting ? "scale-95 opacity-0" : "scale-100 opacity-100"
         }`}
       >
-        {/* Floating Botanical Garden Constellation across the viewport */}
         <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
           {PRELOADER_BLOOMS.map((flower) => {
             const visible = progress >= flower.threshold;
@@ -362,7 +368,6 @@ export function SitePreloader() {
           })}
         </div>
 
-        {/* Centerpiece: Clean, Uncluttered Monogram "K" */}
         <div className="relative z-10 h-56 w-56 sm:h-64 sm:w-64">
           <Image
             src="/assets/images/K.png"
@@ -380,10 +385,7 @@ export function SitePreloader() {
         </p>
 
         <div className="mt-5 flex w-60 flex-col gap-2 text-[var(--color-ink-soft)]">
-          <span
-            className="relative block h-px w-full -rotate-[0.7deg] bg-[var(--color-ink)]/15"
-            aria-hidden="true"
-          >
+          <span className="relative block h-px w-full -rotate-[0.7deg] bg-[var(--color-ink)]/15" aria-hidden="true">
             <span
               className="absolute inset-y-0 left-0 bg-[var(--color-green-deep)]/70 transition-[width] duration-300 ease-out"
               style={{ width: `${progress}%` }}
@@ -393,7 +395,6 @@ export function SitePreloader() {
               style={{ left: `${progress}%` }}
             />
           </span>
-
           <span className="flex items-center justify-between text-[9px] uppercase tracking-[0.2em] text-[var(--color-ink-soft)]/60">
             <span>gathering</span>
             <span className="font-serif-editorial text-[11px] tracking-normal tabular-nums text-[var(--color-ink-soft)]">
@@ -402,26 +403,32 @@ export function SitePreloader() {
           </span>
         </div>
 
-        <div className="relative mt-3 flex h-16 items-center justify-center overflow-visible px-4 py-2">
+        <div className="relative mt-4 flex min-h-20 items-center justify-center overflow-visible px-4 py-2">
+          <div
+            className={`flex flex-col items-center gap-3 transition-[opacity,transform] duration-700 ease-[var(--ease-organic)] sm:flex-row ${
+              ready ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
+            }`}
+          >
+            <button
+              type="button"
+              onClick={enterWithMusic}
+              disabled={!ready || exiting}
+              tabIndex={ready ? 0 : -1}
+              className="group inline-flex items-center gap-3 rounded-full border border-[var(--color-green)]/45 bg-[var(--color-cream)] px-6 py-3 font-serif-editorial text-sm italic text-[var(--color-ink)] transition-transform duration-300 ease-[var(--ease-organic)] hover:-rotate-1 hover:scale-[1.035] disabled:cursor-default"
+            >
+              <span aria-hidden="true" className="text-[var(--color-red)]">♪</span>
+              <span>enter with music</span>
+            </button>
             <button
               type="button"
               onClick={enterSite}
               disabled={!ready || exiting}
               tabIndex={ready ? 0 : -1}
-              className={`group inline-flex items-center gap-4 rounded-full border border-[var(--color-green)]/45 bg-white px-6 py-3 font-serif-editorial text-sm italic text-[var(--color-ink)] transition-[opacity,transform] duration-700 ease-[var(--ease-organic)] hover:-rotate-1 hover:scale-[1.035] disabled:cursor-default ${
-                ready
-                  ? "translate-y-0 opacity-100"
-                  : "pointer-events-none translate-y-3 opacity-0"
-              }`}
+              className="font-sans text-[9px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)]/60 underline decoration-[var(--color-ink)]/20 underline-offset-4 transition-colors hover:text-[var(--color-ink)] disabled:cursor-default"
             >
-              <span>step into the garden</span>
-              <span
-                aria-hidden="true"
-                className="not-italic transition-transform duration-300 group-hover:translate-x-1"
-              >
-                &rarr;
-              </span>
+              continue quietly
             </button>
+          </div>
         </div>
       </div>
     </div>

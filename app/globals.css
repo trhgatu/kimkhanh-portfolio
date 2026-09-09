@@ -76,12 +76,21 @@ a:focus-visible {
 }
 
 .hero-paper {
+  min-height: calc(100vh + 4rem);
+  min-height: calc(100dvh + 4rem);
   isolation: isolate;
   background:
     radial-gradient(ellipse 42% 58% at 76% 45%, color-mix(in srgb, var(--color-blush) 48%, transparent), transparent 72%),
     radial-gradient(ellipse 38% 30% at 12% 92%, color-mix(in srgb, var(--color-sage) 42%, transparent), transparent 74%),
     linear-gradient(to bottom, transparent 0%, transparent 68%, var(--color-blush) 100%),
     linear-gradient(135deg, var(--color-paper) 0%, var(--color-cream) 52%, var(--color-paper-deep) 100%);
+}
+
+@media (min-width: 640px) {
+  .hero-paper {
+    min-height: calc(100vh + 6rem);
+    min-height: calc(100dvh + 6rem);
+  }
 }
 
 .hero-paper::before {
