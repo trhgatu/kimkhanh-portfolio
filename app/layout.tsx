@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/animation/SmoothScrollProvider";
 import { CursorPollenOGL } from "@/components/flowers/CursorPollenOGL";
+import { FlowerCursor } from "@/components/flowers/FlowerCursor";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SitePreloader } from "@/components/layout/SitePreloader";
@@ -30,12 +31,14 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://kimkhanh.me"),
-  title: "Kim Khanh — A Little Personal Archive",
+  title: "Kim Khanh — Port Operations & Personal Archive",
   description:
-    "Kim Khanh's little garden on the internet — a personal collection of flowers, places, words, and everyday joys.",
+    "Kim Khanh is a commercial specialist in port operations. Explore her work journey, education, stories, and little joys.",
   keywords: [
     "Kim Khanh",
-    "personal archive",
+    "commercial specialist",
+    "port operations",
+    "transport operations",
     "botanical garden",
     "flowers",
     "slow living",
@@ -48,9 +51,9 @@ export const metadata: Metadata = {
   ],
   creator: "trhgatu",
   openGraph: {
-    title: "Kim Khanh — A Little Personal Archive",
+    title: "Kim Khanh — Port Operations & Personal Archive",
     description:
-      "A personal collection of flowers, places, words, and everyday joys.",
+      "A personal journey through port operations, education, varied work experiences, and everyday joys.",
     type: "website",
     locale: "en_US",
     images: [
@@ -64,9 +67,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kim Khanh — A Little Personal Archive",
+    title: "Kim Khanh — Port Operations & Personal Archive",
     description:
-      "A personal collection of flowers, places, words, and everyday joys.",
+      "A personal journey through port operations, education, varied work experiences, and everyday joys.",
     images: ["/assets/images/flower_2.avif"],
   },
 };
@@ -80,6 +83,7 @@ export default function RootLayout({
         <SitePreloader />
         <SmoothScrollProvider>
           <CursorPollenOGL />
+          <FlowerCursor />
           <Navbar />
           <main>{children}</main>
           <Footer />

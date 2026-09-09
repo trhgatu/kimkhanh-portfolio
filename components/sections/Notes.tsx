@@ -67,8 +67,8 @@ export function Notes() {
     <section
       id="notes"
       ref={sectionRef}
-      aria-label="Notes and small fragments"
-      className="relative z-10 bg-[var(--color-paper)] px-5 pt-28 pb-6 sm:px-10 sm:pt-36 sm:pb-8"
+      aria-label="Personal stories and reflections"
+      className="relative z-10 bg-[var(--color-paper)] px-5 pt-28 pb-28 sm:px-10 sm:pt-36 sm:pb-36"
     >
       <div
         aria-hidden="true"
@@ -78,21 +78,21 @@ export function Notes() {
       <div className="relative mx-auto max-w-6xl">
         <header className="mb-16 max-w-2xl sm:mb-20">
           <p className="font-hand inline-block -rotate-2 text-2xl text-[var(--color-red)] sm:text-3xl">
-            margins & fragments
+            stories behind the facts
           </p>
           <h2 className="font-serif-editorial mt-3 text-[clamp(2.75rem,5.5vw,5rem)] leading-[0.92] tracking-[-0.05em] text-[var(--color-ink)]">
             <RevealText
               lines={[
-                "Notes written",
+                "A few things",
                 <span key="in-the-margins" className="block pb-[0.1em]">
-                  between the lines.
+                  that shaped me.
                 </span>,
               ]}
             />
           </h2>
           <p className="mt-6 font-sans text-sm leading-7 text-[var(--color-ink-soft)] sm:text-base">
-            Sentences from worn paperbacks, thoughts that arrived when least expected,
-            and small reminders of what is worth keeping tender.
+            Small stories from port life, student jobs, sketchbooks, books,
+            flowers, courts, and chessboards.
           </p>
         </header>
 
@@ -146,6 +146,31 @@ export function Notes() {
             </article>
           ))}
         </div>
+
+        {/* The Bookmark & Closing Whisper */}
+        <footer className="mt-20 flex flex-col items-center justify-center text-center sm:mt-28">
+          {/* Hanging bookmark silk ribbon */}
+          <div className="relative mb-5 flex flex-col items-center">
+            <span
+              aria-hidden="true"
+              className="h-12 w-1 rounded-full bg-[var(--color-red)]/45 sm:h-16"
+            />
+            <span
+              aria-hidden="true"
+              className="relative -mt-1 flex h-7 w-7 items-center justify-center rounded-full border border-[var(--color-red)]/25 bg-[var(--color-cream)] text-xs text-[var(--color-red)] shadow-sm"
+            >
+              ✿
+            </span>
+          </div>
+
+          <p className="font-hand text-2xl text-[var(--color-green-deep)] sm:text-3xl">
+            every experience leaves something worth keeping.
+          </p>
+
+          <span className="font-sans mt-3 text-[10px] uppercase tracking-[0.22em] text-[var(--color-ink-soft)]/50">
+            more chapters are still being written
+          </span>
+        </footer>
       </div>
 
       {/* Note Detail Modal */}

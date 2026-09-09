@@ -28,24 +28,25 @@ export function Projects() {
         <div className="grid gap-20 lg:grid-cols-[minmax(19rem,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-16 xl:gap-24">
           <header className="lg:sticky lg:top-28 lg:self-start">
             <p className="font-hand inline-block -rotate-2 text-2xl text-[var(--color-red)] sm:text-3xl">
-              from my little archive
+              chapters from my journey
             </p>
             <h2 className="font-serif-editorial mt-4 text-[clamp(3.6rem,7vw,7rem)] leading-[0.9] tracking-[-0.06em]">
               <RevealText
                 lines={[
-                  "Things worth",
+                  "The paths that",
                   <span key="keeping" className="block pb-[0.16em]">
-                    keeping.
+                    shaped me.
                   </span>,
                 ]}
               />
             </h2>
 
             <p className="mt-8 max-w-md font-sans text-sm leading-7 text-[var(--color-ink-soft)] sm:text-base">
-              A handful of flowers, places, rituals, and words that make everyday life feel a little more tender.
+              Work, education, unexpected part-time jobs, and the interests I
+              keep close—collected into one honest, evolving story.
             </p>
             <p className="font-hand mt-6 text-xl text-[var(--color-green-deep)]">
-              collected slowly, with care ↓
+              learned through doing ↓
             </p>
           </header>
 
@@ -61,10 +62,10 @@ export function Projects() {
         </div>
 
         <footer className="mt-28 flex items-center gap-5 border-t border-[var(--color-green-deep)]/20 pt-6 sm:mt-40">
-          <span className="font-hand text-xl text-[var(--color-red)]">to be continued</span>
+          <span className="font-hand text-xl text-[var(--color-red)]">still learning</span>
           <span aria-hidden="true" className="h-px flex-1 bg-[var(--color-green-deep)]/15" />
           <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-[var(--color-ink)]/45">
-            more small joys soon
+            the journey continues
           </span>
         </footer>
       </div>

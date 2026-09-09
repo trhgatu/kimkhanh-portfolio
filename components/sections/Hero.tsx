@@ -244,8 +244,8 @@ export function Hero() {
             ref={supportingRef}
             className="mt-6 max-w-md font-sans text-lg text-[var(--color-ink-soft)] sm:ml-2 sm:text-xl"
           >
-            A small collection of things I notice, love, and want to keep
-            close — gathered here like a little garden on the internet.
+            A commercial specialist in port operations, with a fondness for
+            flowers, drawing, books, and little everyday adventures.
           </p>
 
           <div ref={cueRef} className="mt-10 flex flex-wrap items-center gap-4 sm:ml-2">
@@ -267,8 +267,8 @@ export function Hero() {
       </div>
 
       <div ref={footerRef} className="absolute inset-x-6 bottom-28 z-10 hidden items-center justify-between gap-8 border-t border-[var(--color-ink)]/12 pt-3 font-sans text-[9px] uppercase tracking-[0.22em] text-[var(--color-ink-soft)]/60 sm:flex sm:inset-x-10">
-        <span>notes · collections · everyday details</span>
-        <span className="hidden lg:inline">books · films · flowers · places · small joys</span>
+        <span>port life · stories · everyday details</span>
+        <span className="hidden lg:inline">work · books · flowers · places · small joys</span>
         <span>scroll gently ↓</span>
       </div>
     </section>

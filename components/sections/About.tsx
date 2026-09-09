@@ -1,84 +1,65 @@
+import Image from "next/image";
 import { RevealText } from "@/components/animation/RevealText";
 import { AboutAtmosphere } from "@/components/animation/AboutAtmosphere";
+import { AboutProfileFacts } from "./AboutProfileFacts";
 
 export function About() {
   return (
     <section
       id="about"
-      className="relative mx-auto max-w-6xl overflow-hidden px-6 py-32 sm:px-10 sm:py-40"
+      className="relative mx-auto flex min-h-svh max-w-7xl items-center overflow-hidden px-6 py-20 sm:px-10 sm:py-24 lg:py-20"
     >
       <AboutAtmosphere />
 
-      <div className="relative z-10 grid gap-12 sm:grid-cols-[0.7fr_1.3fr] sm:items-center sm:gap-20">
-        <div className="relative mx-auto w-full max-w-[16rem] sm:mx-0">
-          <div className="relative aspect-[4/5] rotate-[-3deg] overflow-hidden rounded-[48%_52%_46%_54%] border border-[var(--color-ink)]/15 bg-[var(--color-blush)] p-2 shadow-[0_18px_40px_rgba(42,40,35,0.08)]">
-            <div className="relative flex h-full items-center justify-center overflow-hidden rounded-[46%_54%_50%_50%] bg-[var(--color-sage)]">
-              <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[var(--color-yellow)]/45 blur-xl" />
-              <div className="absolute -bottom-10 -left-8 h-32 w-32 rounded-full bg-[var(--color-pink)]/45 blur-xl" />
-              <svg viewBox="0 0 180 220" aria-hidden="true" className="relative h-[78%] w-[78%] text-[var(--color-ink)]/70">
-                <path
-                  d="M55,203 C57,164 64,144 90,140 C116,144 123,164 125,203"
-                  fill="var(--color-paper)"
-                  fillOpacity="0.72"
-                />
-                <path
-                  d="M52,101 C52,57 70,31 91,31 C115,31 132,56 128,102 C125,135 111,151 90,151 C69,151 55,134 52,101 Z"
-                  fill="var(--color-paper)"
-                  fillOpacity="0.86"
-                />
-                <path
-                  d="M52,95 C49,54 67,23 93,24 C119,25 136,51 128,96 C116,74 103,65 89,64 C77,64 66,74 52,95 Z"
-                  fill="var(--color-green-deep)"
-                  fillOpacity="0.82"
-                />
-                <path d="M71,105 Q78,100 85,105 M96,105 Q103,100 110,105" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-                <path d="M82,126 Q90,131 98,126" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                <path d="M90,112 L88,121 L94,121" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+      <div className="relative z-10 grid w-full gap-14 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:gap-16 xl:gap-24">
+        <div className="relative mx-auto w-full max-w-[25rem] lg:mx-0 lg:max-w-[30rem]">
+          <div className="relative aspect-[4/5] rotate-[-2deg] border border-[var(--color-ink)]/12 bg-[var(--color-cream)] p-3 sm:p-4">
+            <span
+              aria-hidden="true"
+              className="absolute -top-4 left-1/2 z-20 h-8 w-28 -translate-x-1/2 rotate-[3deg] bg-[#ead9a9]/75 mix-blend-multiply"
+            />
+            <div className="relative h-full overflow-hidden bg-[var(--color-paper-deep)]">
+              <Image
+                src="/assets/images/avatar.jpg"
+                alt="Kim Khanh smiling outdoors"
+                fill
+                sizes="(min-width: 1280px) 480px, (min-width: 1024px) 40vw, 400px"
+                className="object-cover object-[50%_62%] brightness-[1.03] contrast-[0.92] saturate-[0.82] sepia-[0.08]"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-[#e8cda5]/10 mix-blend-multiply"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-[linear-gradient(180deg,transparent_68%,rgba(42,40,35,0.12))]"
+              />
+            </div>
+            <div className="flex items-center justify-between px-1 pb-0 pt-3 font-sans text-[8px] uppercase tracking-[0.2em] text-[var(--color-ink)]/45">
+              <span>portrait no. 01</span>
+              <span>Can Tho · Vietnam</span>
             </div>
           </div>
-          <span className="font-hand absolute -bottom-5 -right-3 rotate-[-5deg] text-xl text-[var(--color-red)]">
+          <span className="font-hand absolute -bottom-7 -right-2 rotate-[-5deg] text-2xl text-[var(--color-red)] sm:-right-5">
             hello, that&apos;s me
           </span>
         </div>
 
-        <div className="flex flex-col justify-center gap-6">
+        <div className="flex flex-col justify-center">
           <div>
-            <span className="font-hand mb-4 inline-block -rotate-2 text-2xl text-[var(--color-red)]">
+            <span className="font-hand mb-3 inline-block -rotate-2 text-2xl text-[var(--color-red)] sm:text-3xl">
               a little about me
             </span>
-            <h2 className="font-serif-editorial text-[clamp(2rem,5.5vw,3.75rem)] leading-[1.05] tracking-tight text-[var(--color-ink)]">
+            <h2 className="font-serif-editorial text-[clamp(2.8rem,5vw,5.2rem)] leading-[0.92] tracking-[-0.05em] text-[var(--color-ink)]">
               <RevealText
                 lines={[
-                  "A soft place for curious",
-                  "things, small discoveries,",
-                  "and slow thoughts.",
+                  "A life shaped by",
+                  "work & small joys.",
                 ]}
               />
             </h2>
           </div>
-
-          <p className="font-sans text-base leading-relaxed text-[var(--color-ink-soft)] sm:text-lg">
-            I&apos;m Kim Khanh. This is a small corner of the internet for the
-            things I notice, collect, and return to — notes, images, ideas,
-            and little traces of everyday life.
-          </p>
-          <p className="font-sans text-base leading-relaxed text-[var(--color-ink-soft)] sm:text-lg">
-            I like the quiet details: a good sentence, an unexpected colour,
-            a place worth returning to, and anything that makes an ordinary
-            day feel a little more alive.
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            {["books", "films", "flowers", "places", "small joys"].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-[var(--color-ink)]/15 px-3 py-1 font-sans text-xs text-[var(--color-ink-soft)]"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+          <AboutProfileFacts />
         </div>
       </div>
     </section>

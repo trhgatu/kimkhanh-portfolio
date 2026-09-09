@@ -1,0 +1,21 @@
+export const PROFILE = {
+  name: "Kim Khanh",
+  email: "kkhanhvnhg@gmail.com",
+  hometown: "Can Tho City, Vietnam",
+  birthYear: "2002",
+  sign: "Pisces",
+  element: "Wood element",
+  role: "Commercial Specialist in Port Operations",
+  university: "Ho Chi Minh City University of Transport",
+  major: "Transport Operations",
+  graduationYear: "2024",
+  gpa: "3.18",
+  ielts: {
+    year: "2026",
+    overall: "6.0",
+    listening: "5.0",
+    reading: "6.0",
+    speaking: "6.0",
+    writing: "6.5",
+  },
+} as const;

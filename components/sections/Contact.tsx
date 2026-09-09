@@ -3,17 +3,18 @@
 import { useState } from "react";
 import { RevealText } from "@/components/animation/RevealText";
 import { FloralWheel } from "@/components/animation/FloralWheel";
+import { PROFILE } from "@/data/profile";
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
 
   const copyEmail = async () => {
     try {
-      await navigator.clipboard.writeText("hello@kimkhanh.me");
+      await navigator.clipboard.writeText(PROFILE.email);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      window.location.href = "mailto:hello@kimkhanh.me";
+      window.location.href = `mailto:${PROFILE.email}`;
     }
   };
 
@@ -21,8 +22,9 @@ export function Contact() {
     <section
       id="contact"
       data-contact-section
-      className="relative min-h-[200svh] bg-[#f5f0df] sm:min-h-[210svh]"
+      className="relative z-20 -mt-10 min-h-[200svh] overflow-clip rounded-t-[3.5rem] bg-[#f5f0df] shadow-[0_-24px_70px_rgba(42,40,35,0.07)] sm:-mt-16 sm:min-h-[210svh] sm:rounded-t-[5rem]"
     >
+
       <div className="sticky top-0 flex h-svh items-center justify-center overflow-hidden bg-[#f5f0df] px-3 sm:px-10">
         <FloralWheel />
 
@@ -35,8 +37,8 @@ export function Contact() {
           </h2>
 
           <p className="relative mx-auto mt-3 max-w-[17rem] px-1 font-sans text-[13px] leading-[1.5] text-white/75 sm:mt-6 sm:max-w-sm sm:px-0 sm:text-base sm:leading-relaxed">
-            Trade a book note, talk about flowers, or simply leave a kind little
-            hello. My inbox is always open.
+            Talk to me about port operations, a new opportunity, books, flowers,
+            or simply leave a kind little hello. My inbox is always open.
           </p>
 
           <div className="relative mt-5 flex items-center justify-center sm:mt-8">
@@ -45,7 +47,7 @@ export function Contact() {
               onClick={copyEmail}
               className="group relative inline-flex items-center gap-2 rounded-full border border-white bg-white px-5 py-2.5 font-serif-editorial text-xs text-[var(--color-ink)] shadow-[0_10px_28px_rgba(42,40,35,0.14)] transition-transform duration-300 ease-[var(--ease-organic)] hover:-rotate-1 hover:scale-[1.03] sm:px-7 sm:py-3.5 sm:text-sm"
             >
-              <span>{copied ? "copied to clipboard ✿" : "hello@kimkhanh.me"}</span>
+              <span>{copied ? "copied to clipboard ✿" : PROFILE.email}</span>
               <span
                 aria-hidden="true"
                 className="text-[10px] text-[var(--color-ink-soft)]/50 group-hover:text-[var(--color-red)]"
